@@ -6,6 +6,9 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // This is the credential ID used in Jenkins
         ACR_NAME = "examregister121"
         ACR_LOGIN_SERVER = "examregister121.azurecr.io"
+        IMAGE_NAME = "node-app"
+        TAG = "latest"
+        RESOURCE_GROUP = "examResourceGroup"
     }
 
     stages {
