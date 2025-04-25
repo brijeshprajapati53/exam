@@ -8,7 +8,7 @@ pipeline {
         ACR_LOGIN_SERVER = "examregister121.azurecr.io" // Corrected login server
         IMAGE_NAME = "node-app"
         TAG = "latest"
-        RESOURCE_GROUP = "examResourceGroup"
+      
     }
 
     stages {
