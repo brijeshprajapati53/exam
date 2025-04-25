@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'brijeshprajapati53/node-app'
-        DOCKER_HUB_CREDENTIALS = 'dockerhub-credentials-id' // Add this in Jenkins > Credentials
+        DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // Add this in Jenkins > Credentials
     }
 
     stages {
