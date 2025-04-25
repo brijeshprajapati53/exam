@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'brijeshprajapati53/node-app:latest'
-        DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // Add this in Jenkins > Credentials
+        DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // This is the credential ID used in Jenkins
     }
 
     stages {
@@ -12,22 +12,31 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/brijeshprajapati53/exam.git'
             }
         }
-
-        stage('Build Docker Image') {
+        
+        stage('Azure Login') {
             steps {
-                script {
-                    docker.build("${DOCKER_IMAGE}")
+                withCredentials([azureServicePrincipal(
+                    credentialsId: 'azure-service-principal',
+                    subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID',
+                    clientIdVariable: 'AZ_CLIENT_ID',
+                    clientSecretVariable: 'AZ_CLIENT_SECRET',
+                    tenantIdVariable: 'AZ_TENANT_ID'
+                )]) {
+                    bat '''
+                        az login --service-principal -u %AZ_CLIENT_ID% -p %AZ_CLIENT_SECRET% --tenant %AZ_TENANT_ID%
+                        az account set --subscription %AZ_SUBSCRIPTION_ID%
+                    '''
                 }
             }
         }
 
-        stage('Push to Docker Hub') {
+        stage('Docker Build & Push') {
             steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKER_HUB_CREDENTIALS}") {
-                        docker.image("${DOCKER_IMAGE}").push('latest')
-                    }
-                }
+                bat """
+                    az acr login --name %ACR_NAME%
+                    docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG% .
+                    docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG%
+                """
             }
         }
     }
