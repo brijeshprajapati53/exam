@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'brijeshprajapati53/node-app'
+        DOCKER_IMAGE = 'brijeshprajapati53/node-app:latest'
         DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // Add this in Jenkins > Credentials
     }
 
