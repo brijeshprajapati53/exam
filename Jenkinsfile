@@ -4,8 +4,8 @@ pipeline {
     environment {
         DOCKER_IMAGE = 'brijeshprajapati53/node-app:latest'
         DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // This is the credential ID used in Jenkins
-        ACR_NAME = "exam-register"
-        ACR_LOGIN_SERVER = "exam-register.azurecr.io"
+        ACR_NAME = "examregister121"
+        ACR_LOGIN_SERVER = "examregister121.azurecr.io"
     }
 
     stages {
