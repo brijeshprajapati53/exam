@@ -2,28 +2,27 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_IMAGE = 'brijeshprajapati53/node-app:latest'
-        DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // This is the credential ID used in Jenkins
+        AZURE_CREDENTIALS_ID = 'azure-service-principal' // Must be configured in Jenkins credentials
         ACR_NAME = "examregister112"
-        ACR_LOGIN_SERVER = "examregister112.azurecr.io" // Corrected login server
-        IMAGE_NAME = "nodeapp"
-        TAG = "v2"
-        RESOURCE_GROUP = "exam-rg"      // Replace with your actual resource group
-        LOCATION = "centralindia"       // Replace with your preferred Azure region
-      
+        ACR_LOGIN_SERVER = "examregister112.azurecr.io"
+        IMAGE_NAME = "node-app"
+        TAG = "latest"
+        RESOURCE_GROUP = "my-exam-rg"
+        // AKS_CLUSTER_NAME = "aksclusterbrijesh123"
     }
 
     stages {
-        stage('Clone repository') {
-            steps {
-                git branch: 'main', url: 'https://github.com/brijeshprajapati53/exam.git'
-            }
-        }
-        
+        stage('Checkout') {
+    steps {
+        git branch: 'main', url: 'https://github.com/brijeshprajapati53/exam.git'
+    }
+}
+
+
         stage('Azure Login') {
             steps {
                 withCredentials([azureServicePrincipal(
-                    credentialsId: 'azure-service-principal',
+                    credentialsId: "${AZURE_CREDENTIALS_ID}",
                     subscriptionIdVariable: 'AZ_SUBSCRIPTION_ID',
                     clientIdVariable: 'AZ_CLIENT_ID',
                     clientSecretVariable: 'AZ_CLIENT_SECRET',
@@ -37,29 +36,53 @@ pipeline {
             }
         }
 
-         stage('Create ACR if not exists') {
+        stage('Terraform Init & Apply') {
             steps {
-                bat '''
-                    az acr show --name %ACR_NAME% --query "name" || ^
-                    az acr create --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --sku Basic --location %LOCATION%
-                '''
+                dir('Terraform') {
+                    bat 'terraform init'
+                    bat 'terraform apply -auto-approve'
+                }
             }
         }
 
         stage('Login to ACR') {
             steps {
                 bat "az acr login --name %ACR_NAME%"
-                
-            }
-        }
-       
-          stage('Docker Build & Push') {
-            steps { 
-                bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG% ."
-                bat "docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG%"
             }
         }
 
-               
+        stage('Docker Build & Push') {
+            steps {
+                bat """
+                    az acr login --name %ACR_NAME%
+                    docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG% .
+                    docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG%
+                """
+            }
+        }
+
+        // stage('AKS Authentication') {
+        //     steps {
+        //         bat """
+        //             az aks get-credentials --resource-group %RESOURCE_GROUP% --name %AKS_CLUSTER_NAME% --overwrite-existing
+        //         """
+        //     }
+        // }
+
+        // stage('Deploy to AKS') {
+        //     steps {
+        //         bat 'kubectl apply -f deployment.yaml'
+                
+        //     }
+        // }
+    }
+
+    post {
+        failure {
+            echo " Build failed."
+        }
+        success {
+            echo " Application deployed successfully to AKS!"
+        }
     }
 }
