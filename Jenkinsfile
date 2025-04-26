@@ -8,7 +8,7 @@ pipeline {
         IMAGE_NAME = "node-app"
         TAG = "latest"
         RESOURCE_GROUP = "examResourceGroup"
-        LOCATION = "East US"
+        LOCATION = "East US 2"
         // AKS_CLUSTER_NAME = "aksclusterbrijesh123"
     }
 
