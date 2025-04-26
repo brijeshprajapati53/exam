@@ -3,8 +3,8 @@ pipeline {
 
     environment {
         AZURE_CREDENTIALS_ID = 'azure-service-principal' // Must be configured in Jenkins credentials
-        ACR_NAME = "acrbrijesh123"
-        ACR_LOGIN_SERVER = "acrbrijesh123.azurecr.io"
+        ACR_NAME = "acrbrijesh1238"
+        ACR_LOGIN_SERVER = "acrbrijesh1238.azurecr.io"
         IMAGE_NAME = "mynodeapp"
         TAG = "latest"
         RESOURCE_GROUP = "examresource"
@@ -41,6 +41,7 @@ pipeline {
             steps {
                 dir('Terraform') {
                     bat 'terraform init'
+                    bat 'terraform plan'
                     bat 'terraform apply -auto-approve'
                 }
             }
