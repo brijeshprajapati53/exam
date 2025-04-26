@@ -7,14 +7,14 @@ pipeline {
         ACR_LOGIN_SERVER = "examregister112.azurecr.io"
         IMAGE_NAME = "node-app"
         TAG = "latest"
-        RESOURCE_GROUP = "my-rg"
+        RESOURCE_GROUP = "my-exam-rg"
         // AKS_CLUSTER_NAME = "aksclusterbrijesh123"
     }
 
     stages {
         stage('Checkout') {
     steps {
-        git branch: 'main', url: 'https://github.com/brijeshprajapati53/DotNet-API-AKS-Pipeline.git'
+        git branch: 'main', url: 'https://github.com/brijeshprajapati53/exam.git'
     }
 }
 
