@@ -37,7 +37,7 @@ pipeline {
 
         stage('Login to ACR') {
             steps {
-                bat "az acr login --name %ACR_NAME%"
+                bat "az acr login --name %ACR_LOGIN_SERVER%"
                 
             }
         }
