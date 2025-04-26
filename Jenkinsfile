@@ -37,13 +37,13 @@ pipeline {
 
         stage('Login to ACR') {
             steps {
-                bat "az acr login --name %ACR_LOGIN_SERVER%"
+                bat "az acr login --name %ACR_NAME%"
                 
             }
         }
        
           stage('Docker Build & Push') {
-            steps {
+            steps { 
                 bat "docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG% ."
                 bat "docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG%"
             }
