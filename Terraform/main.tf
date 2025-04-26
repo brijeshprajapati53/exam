@@ -5,11 +5,11 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "exam_rg" {
   name     = "examResourceGroup"
-  location = "East US"
+  location = "East US 2"
 }
 
 resource "azurerm_storage_account" "exam_sa" {
-  name                     = "storageaccountbrijesh001"
+  name                     = "storagebrijesh678"
   resource_group_name      = azurerm_resource_group.exam_rg.name
   location                 = azurerm_resource_group.exam_rg.location
   account_tier             = "Standard"
