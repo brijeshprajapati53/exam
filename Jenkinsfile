@@ -7,7 +7,8 @@ pipeline {
         ACR_LOGIN_SERVER = "examregister112.azurecr.io"
         IMAGE_NAME = "node-app"
         TAG = "latest"
-        RESOURCE_GROUP = "my-exam-rg"
+        RESOURCE_GROUP = "examResourceGroup"
+        LOCATION = "East US"
         // AKS_CLUSTER_NAME = "aksclusterbrijesh123"
     }
 
@@ -48,6 +49,15 @@ pipeline {
         stage('Login to ACR') {
             steps {
                 bat "az acr login --name %ACR_NAME%"
+            }
+        }
+        
+         stage('Create ACR if not exists') {
+            steps {
+                bat '''
+                    az acr show --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --query "name" || ^
+                    az acr create --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --sku Basic --location %LOCATION%
+                '''
             }
         }
 
