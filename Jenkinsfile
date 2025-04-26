@@ -46,12 +46,6 @@ pipeline {
             }
         }
 
-        stage('Login to ACR') {
-            steps {
-                bat "az acr login --name %ACR_NAME%"
-            }
-        }
-        
          stage('Create ACR if not exists') {
             steps {
                 bat '''
@@ -60,6 +54,14 @@ pipeline {
                 '''
             }
         }
+
+        stage('Login to ACR') {
+            steps {
+                bat "az acr login --name %ACR_NAME%"
+            }
+        }
+        
+        
 
         stage('Docker Build & Push') {
             steps {
