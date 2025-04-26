@@ -8,6 +8,8 @@ pipeline {
         ACR_LOGIN_SERVER = "examregister112.azurecr.io" // Corrected login server
         IMAGE_NAME = "nodeapp"
         TAG = "v2"
+        RESOURCE_GROUP = "exam-rg"      // Replace with your actual resource group
+        LOCATION = "centralindia"       // Replace with your preferred Azure region
       
     }
 
@@ -32,6 +34,15 @@ pipeline {
                         az account set --subscription %AZ_SUBSCRIPTION_ID%
                     '''
                 }
+            }
+        }
+
+         stage('Create ACR if not exists') {
+            steps {
+                bat '''
+                    az acr show --name %ACR_NAME% --query "name" || ^
+                    az acr create --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --sku Basic --location %LOCATION%
+                '''
             }
         }
 
