@@ -3,11 +3,11 @@ pipeline {
 
     environment {
         AZURE_CREDENTIALS_ID = 'azure-service-principal' // Must be configured in Jenkins credentials
-        ACR_NAME = "examregister112"
-        ACR_LOGIN_SERVER = "examregister112.azurecr.io"
-        IMAGE_NAME = "node-app"
+        ACR_NAME = "acrbrijesh123"
+        ACR_LOGIN_SERVER = "acrbrijesh123.azurecr.io"
+        IMAGE_NAME = "mynodeapp"
         TAG = "latest"
-        RESOURCE_GROUP = "examResourceGroup"
+        RESOURCE_GROUP = "examresource"
         LOCATION = "East US 2"
         // AKS_CLUSTER_NAME = "aksclusterbrijesh123"
     }
@@ -46,14 +46,14 @@ pipeline {
             }
         }
 
-         stage('Create ACR if not exists') {
-            steps {
-                bat '''
-                    az acr show --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --query "name" || ^
-                    az acr create --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --sku Basic --location %LOCATION%
-                '''
-            }
-        }
+        //  stage('Create ACR if not exists') {
+        //     steps {
+        //         bat '''
+        //             az acr show --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --query "name" || ^
+        //             az acr create --name %ACR_NAME% --resource-group %RESOURCE_GROUP% --sku Basic --location %LOCATION%
+        //         '''
+        //     }
+        // }
 
         stage('Login to ACR') {
             steps {
