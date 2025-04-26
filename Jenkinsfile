@@ -6,7 +6,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = 'azure-service-principal' // This is the credential ID used in Jenkins
         ACR_NAME = "examregister112"
         ACR_LOGIN_SERVER = "examregister112.azurecr.io" // Corrected login server
-        IMAGE_NAME = "node-app"
+        IMAGE_NAME = "nodeapp"
         TAG = "latest"
       
     }
@@ -35,7 +35,16 @@ pipeline {
             }
         }
 
-        stage('Docker Build & Push') {
+        // stage('Docker Build & Push') {
+        //     steps {
+        //         bat """
+        //             az acr login --name %ACR_NAME%
+        //             docker build -t %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG% .
+        //             docker push %ACR_LOGIN_SERVER%/%IMAGE_NAME%:%TAG%
+        //         """
+        //     }
+        // }
+          stage('Docker Build & Push') {
             steps {
                 bat """
                     az acr login --name %ACR_NAME%
