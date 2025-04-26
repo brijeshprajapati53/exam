@@ -7,7 +7,7 @@ pipeline {
         ACR_NAME = "examregister112"
         ACR_LOGIN_SERVER = "examregister112.azurecr.io" // Corrected login server
         IMAGE_NAME = "nodeapp"
-        TAG = "latest"
+        TAG = "v2"
       
     }
 
